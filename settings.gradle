@@ -1,0 +1,2 @@
+include ':app', ':slog'
+rootProject.name='SLog'
