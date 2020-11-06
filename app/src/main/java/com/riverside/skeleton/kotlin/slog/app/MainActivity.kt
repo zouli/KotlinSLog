@@ -24,9 +24,12 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        //Logcat输出器
         SLog.TAG_FORMAT =
             "{{now|yyyy-MM-dd HH:mm:ss}} [{{thread_name}}({{thread_id}}):{{filename}}({{line_number}}):{{method_name}}]"
         SLog.addPrinter(SLogPrinter())
+
+        //文件输出器
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -34,13 +37,17 @@ class MainActivity : AppCompatActivity() {
         ) {
             FilePrinter.FILENAME_FORMAT = "/SLog{{now|yyyyMMdd}}.log"
             FilePrinter.MSG_FORMAT = "{{level_long}}/{{tag}}: {{msg}}"
-            SLog.addPrinter(FilePrinter(Environment.getExternalStorageDirectory().toString() + "/SLog"))
-        }
-        SLog.addPrinter(NetPrinter { level, tag, msg, throwable ->
-            Log.i(
-                tag,
-                msg
+            SLog.addPrinter(
+                FilePrinter(
+                    Environment.getExternalStorageDirectory().toString() + "/SLog"
+                )
             )
+        }
+
+        //网络接口输出器
+        SLog.addPrinter(NetPrinter { level, tag, msg, throwable ->
+            //调用网络接口
+            Log.i(tag, msg)
         })
 
         btn_print.setOnClickListener {
