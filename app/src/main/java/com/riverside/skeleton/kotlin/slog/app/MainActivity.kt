@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
             Log.i(tag, msg)
         })
 
+        SLog.w(null)
+
         btn_print.setOnClickListener {
             runBlocking {
                 val channel = Channel<String>()

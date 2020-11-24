@@ -50,22 +50,22 @@ object SLog {
         }
     }
 
-    fun v(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun v(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_VERBOSE, tag, msg.toString(), throwable)
 
-    fun d(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun d(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_DEBUG, tag, msg.toString(), throwable)
 
-    fun i(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun i(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_INFO, tag, msg.toString(), throwable)
 
-    fun w(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun w(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_WARNING, tag, msg.toString(), throwable)
 
-    fun e(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun e(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_ERROR, tag, msg.toString(), throwable)
 
-    fun f(msg: Any, throwable: Throwable? = null, tag: String = getTag()) =
+    fun f(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
         print(SLogLevel.LEVEL_FATAL, tag, msg.toString(), throwable)
 
     fun addPrinter(printer: Printer) {
