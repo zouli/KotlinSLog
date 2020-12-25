@@ -8,14 +8,19 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
- * 通用Log输出类 1.0
+ * 通用Log输出类 1.1
  * b_e  2019/12/13
+ * 1.1  简化参数    2020/12/25
+ * 1.1  添加类型判断  2020/12/25
  */
 object SLog {
     private const val TAG = "SLog"
     private val printers: MutableList<Printer> = ArrayList()
+
     /**
      * TAG格式
      * 模板字段格式为 {{关键字}}
@@ -50,31 +55,25 @@ object SLog {
         }
     }
 
-    fun v(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_VERBOSE, tag, msg.toString(), throwable)
-
-    fun d(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_DEBUG, tag, msg.toString(), throwable)
-
-    fun i(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_INFO, tag, msg.toString(), throwable)
-
-    fun w(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_WARNING, tag, msg.toString(), throwable)
-
-    fun e(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_ERROR, tag, msg.toString(), throwable)
-
-    fun f(msg: Any?, throwable: Throwable? = null, tag: String = getTag()) =
-        print(SLogLevel.LEVEL_FATAL, tag, msg.toString(), throwable)
+    fun v(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_VERBOSE, tag, msg)
+    fun d(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_DEBUG, tag, msg)
+    fun i(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_INFO, tag, msg)
+    fun w(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_WARNING, tag, msg)
+    fun e(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_ERROR, tag, msg)
+    fun f(msg: Any?, tag: String = getTag()) = print(SLogLevel.LEVEL_FATAL, tag, msg)
 
     fun addPrinter(printer: Printer) {
         if (printer !in printers) printers.add(printer)
     }
 
-    private fun print(level: SLogLevel, tag: String, msg: String, throwable: Throwable?) {
+    private fun print(level: SLogLevel, tag: String, msg: Any?) {
         GlobalScope.launch(Dispatchers.Unconfined) {
-            channelPrint.send(PrintInfo(level, tag, msg, throwable))
+            when (msg) {
+                is Throwable -> channelPrint.send(PrintInfo(level, tag, "", msg))
+                is Array<*> -> channelPrint.send(PrintInfo(level, tag, Arrays.toString(msg), null))
+                else -> channelPrint.send(PrintInfo(level, tag, msg.toString(), null))
+            }
+
         }
     }
 

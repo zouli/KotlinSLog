@@ -8,5 +8,11 @@
         android:id="@+id/btn_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="print" />
+        android:text="thread print" />
+
+    <Button
+        android:id="@+id/btn_print1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="normal print" />
 </LinearLayout>

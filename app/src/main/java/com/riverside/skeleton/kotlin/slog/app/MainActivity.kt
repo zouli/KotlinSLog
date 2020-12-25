@@ -47,10 +47,8 @@ class MainActivity : AppCompatActivity() {
         //网络接口输出器
         SLog.addPrinter(NetPrinter { level, tag, msg, throwable ->
             //调用网络接口
-            Log.i(tag, msg)
+            Log.i(tag, "Net=$msg")
         })
-
-        SLog.w(null)
 
         btn_print.setOnClickListener {
             runBlocking {
@@ -62,6 +60,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 coroutineContext.cancelChildren()
             }
+        }
+
+        btn_print1.setOnClickListener {
+            SLog.w(null)
+            SLog.w(arrayOf(1, "贰", 3.3))
+            SLog.w("3" to 4)
+            SLog.w(listOf("a", "2", 3))
+            SLog.w(mutableListOf("b", "5", 6))
+            SLog.w(mapOf(1 to 2, 3 to 4))
+            SLog.w(mutableMapOf("a" to 6, "b" to 7))
+            SLog.w(setOf("a", "b"))
+            SLog.w(mutableSetOf("c", "d"))
         }
     }
 
